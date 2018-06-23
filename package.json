@@ -1,0 +1,31 @@
+{
+  "name": "GraphTest",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "cycle-scripts": "2.1.0"
+  },
+  "dependencies": {
+    "@cycle/collection": "^0.6.0",
+    "@cycle/dom": "18.3.0",
+    "@cycle/http": "^14.9.0",
+    "@cycle/run": "3.3.0",
+    "apollo-client": "^1.9.3",
+    "cycle-apollo": "^0.1.0",
+    "cycle-onionify": "^6.0.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "npm": "^6.1.0",
+    "xstream": "11.0.0"
+  },
+  "scripts": {
+    "start": "cycle-scripts start",
+    "test": "cycle-scripts test",
+    "build": "cycle-scripts build",
+    "eject": "cycle-scripts eject"
+  },
+  "cca": {
+    "language": "javascript",
+    "streamLib": "xstream"
+  }
+}
