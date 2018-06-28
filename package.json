@@ -16,6 +16,8 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "npm": "^6.1.0",
+    "typestyle": "^2.0.1",
+    "uuid": "^3.3.0",
     "xstream": "11.0.0"
   },
   "scripts": {

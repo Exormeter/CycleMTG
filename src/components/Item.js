@@ -9,7 +9,7 @@ export default function Item(sources) {
 
   const imageStream$ = state$.map(state =>{
     return {
-      url: 'https://api.scryfall.com/cards/named?fuzzy=' + state.content.name,
+      url: 'https://api.scryfall.com/cards/named?fuzzy=' + state.card.name,
       category: 'image',
       method: 'GET'
     }
@@ -18,7 +18,7 @@ export default function Item(sources) {
   const vdom$ = sources.HTTP.select('image').flatten().map(res =>{
         return res.body
     }).map(card =>{
-      return table('.card', [
+      return table('.card', {attrs:{ width: 700, height: 250}}, [
         tbody([tr('cardItem', [
           td('leftCol', [img({ attrs:{src: card.image_uris.small}})]),
           td('middleCol',[

@@ -1,16 +1,14 @@
 import xs from 'xstream';
-import flattenSequentially from 'xstream/extra/flattenConcurrently';
-import delay from 'xstream/extra/delay';
 import gql from 'graphql-tag';
-import {div, p, ul, button, li, h, img, input, span} from '@cycle/dom';
+import {div, p, ul, button, input, span, select, option} from '@cycle/dom';
 import {StateSource, makeCollection} from 'cycle-onionify';
 import Item from './components/Item'
 import isolate from '@cycle/isolate';
-import { compose } from 'redux';
+const uuidv4 = require('uuid/v4');
 
 const fetchCards = gql`
-  query ($cmc: Int){
-    cards (cmc: $cmc){
+  query ($cmc: Int, $rarity: String){
+    cards (cmc: $cmc, rarity: $rarity){
       cmc
       name
       type
@@ -23,6 +21,7 @@ function view(listVNode$) {
     div([
       span('Manakosten: '),
       input('.inputCMC', {attrs: {type: 'text'}}),
+      select('.inputRarity', [option({attrs: {value: "Rare"}}, "Rare"), option({attrs: {value: "Uncommon"}}, "Uncommon"), option({attrs: {value: "Common"}}, "Common")]),
       input('.filterWhite', {attrs: {type: 'checkbox'}}), 'Weiß',
       input('.filterBlack', {attrs: {type: 'checkbox'}}), 'Schwarz',
       input('.filterBlue', {attrs: {type: 'checkbox'}}), 'Blau',
@@ -43,41 +42,53 @@ function model(actions) {
   const addReducer$ = actions
   .map(content => function addReducer(prevState) {
     return {
-      list: prevState.list.concat({content, key: String(Date.now())}),
+      list: content
     };
   });
 
   return xs.merge(initReducer$, addReducer$);
 }
   
-  
+
 
 function intent(domSource) {
-  return {
-    cardStream$: domSource.select('.inputCMC').events('keyup').map((ev) => {
-      const cmc = ev.target.value;
-      return {
-        query: fetchCards,
-        variables: { cmc: cmc }, 
-        category: 'cards'
-      };
+    const queryCMC$ = domSource.select('.inputCMC').events('keyup').map((ev) => {
+      return {cmc: parseInt(ev.target.value)}
     })
-  };
+
+    const queryRarity$ = domSource.select('.inputRarity').events('input').map(ev =>{
+      return {rarity: ev.target.value}
+    })
+
+    return{
+      query$: xs.merge(queryCMC$, queryRarity$).fold((query, current) =>{
+        if(current.cmc != undefined){
+          query.variables.cmc = current.cmc;
+        }
+        else if(current.rarity != ""){
+          query.variables.rarity = current.rarity;
+        }
+        return query
+      }
+        , {query: fetchCards, variables: {cmc: -1, rarity:""}, category: 'cards'})
+      .filter(query => query.variables.cmc !== -1)
+      .debug()
+    }
 }
 
 export function App (sources) {
 
   const data$ = sources.Apollo.select('cards')
-    .flatten();
+    .flatten()
+    .map(data => {
+      return data.map(card => {
+        return {
+          card,
+          key: uuidv4()
+        }
+      })
+    });
 
-
-  const cards$ = data$.map( data =>{
-    return xs.fromArray(data);
-  }).compose(flattenSequentially).compose(delay(100)).map( card =>{
-    return card;
-  });
-
-  
   const List = makeCollection({
     item: Item,
     itemKey: s => s.key,
@@ -92,7 +103,7 @@ export function App (sources) {
   
   const listSinks = isolate(List, 'list')(sources)
   const action$ = intent(sources.DOM);
-  const parentReducer$ = model(cards$);
+  const parentReducer$ = model(data$);
   const listReducer$ = listSinks.onion;
   const listHTTP$ = listSinks.HTTP;
   const reducer$ = xs.merge(parentReducer$, listReducer$);
@@ -102,7 +113,7 @@ export function App (sources) {
   const sinks = {
     DOM: vDom$,
     HTTP: listHTTP$,
-    Apollo: action$.cardStream$,
+    Apollo: action$.query$,
     onion: reducer$
   }
   return sinks
