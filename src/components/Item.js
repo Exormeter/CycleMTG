@@ -1,7 +1,5 @@
 import xs, {Stream, MemoryStream} from 'xstream';
 import {li, span, VNode, DOMSource, tbody, table, tr, td, img, p, button} from '@cycle/dom';
-import {StateSource} from 'cycle-onionify';
-import flattenSequentially from 'xstream/extra/flattenConcurrently';
 
 
 export default function Item(sources) {
@@ -13,24 +11,35 @@ export default function Item(sources) {
       category: 'image',
       method: 'GET'
     }
-  })
+  });
 
-  const vdom$ = sources.HTTP.select('image').flatten().map(res =>{
-        return res.body
-    }).map(card =>{
-      return table('.card', {attrs:{ width: 700, height: 250}}, [
-        tbody([tr('cardItem', [
-          td('leftCol', [img({ attrs:{src: card.image_uris.small}})]),
-          td('middleCol',[
-            p('.cardName', card.name), 
-            p('.cardText',  card.oracle_text),
-            p('.cardFlavor', card.flavor_text),
-            button('.delete', 'Delete')
-          ]),
-          td('rightCol', [img({ attrs:{src: 'https://img.scryfall.com/sets/bbd.svg?1528689600', height: "42", width: "42"}})])
-        ])])
-      ])
-    });
+  const symbolStream$ = sources.HTTP.select('image').flatten().map(res =>{
+    return {
+      url: "https://api.scryfall.com/sets/" + res.body.set,
+      category: 'symbol',
+      method: 'GET'
+    }
+  });
+
+  const HTTPStream$ = xs.merge(symbolStream$, imageStream$);
+
+  const modelStream$ = xs.combine(sources.HTTP.select('image').flatten().map(res => res.body),
+                                  sources.HTTP.select('symbol').flatten().map(res => res.body));
+
+  const vdom$ = modelStream$.map(([card, symbol]) =>{
+    return table('.card', {attrs:{ width: 700, height: 250}}, [
+      tbody([tr('cardItem', [
+        td('leftCol', [img({ attrs:{src: card.image_uris.small}})]),
+        td('middleCol',[
+          p('.cardName', card.name), 
+          p('.cardText',  card.oracle_text),
+          p('.cardFlavor', card.flavor_text),
+          button('.delete', 'Delete')
+        ]),
+        td('rightCol', [img({ attrs:{src: symbol.icon_svg_uri, height: "42", width: "42"}})])
+      ])])
+    ])
+  });
 
 
 
@@ -54,6 +63,6 @@ export default function Item(sources) {
   return {
     DOM: vdom$,
     onion: reducer$,
-    HTTP: imageStream$
+    HTTP: HTTPStream$
   };
 }
