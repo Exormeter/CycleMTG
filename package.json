@@ -21,9 +21,9 @@
     "xstream": "11.0.0"
   },
   "scripts": {
-    "build": "cycle-scripts start",
+    "start": "cycle-scripts start",
     "test": "cycle-scripts test",
-    "start": "cycle-scripts build",
+    "build": "cycle-scripts build",
     "eject": "cycle-scripts eject"
   },
   "cca": {
