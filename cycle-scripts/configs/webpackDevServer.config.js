@@ -36,7 +36,7 @@ const fs = require('fs')
 const path = require('path')
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http'
-const host = '0.0.0.0' || 'localhost'
+const host = 'cyclemtg.herokuapp.com' || 'localhost'
 const port = process.env.PORT || 8000
 
 const appDirectory = fs.realpathSync(process.cwd())
