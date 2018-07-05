@@ -35,7 +35,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const protocol = process.env.HTTPS === 'true' ? 'https' : 'http'
+const protocol = 'https'
 const host = 'cyclemtg.herokuapp.com' || 'localhost'
 const port = process.env.PORT || 8000
 
