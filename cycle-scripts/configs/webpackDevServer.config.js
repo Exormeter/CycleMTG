@@ -43,7 +43,6 @@ function resolveApp (relativePath) {
   return path.resolve(appDirectory, relativePath)
 }
 
-const PORT = process.env.PORT || 3000;
 
 module.exports = {
   port: PORT, // tofix
@@ -86,6 +85,13 @@ module.exports = {
   watchOptions: {
     ignored: /node_modules/
   },
+
+  devServer: {
+    host: '0.0.0.0',
+    port: $PORT
+  },
+
+
   // Enable HTTPS if the HTTPS environment variable is set to 'true'
   https: protocol === 'https',
   host: host,
