@@ -45,7 +45,7 @@ function resolveApp (relativePath) {
 
 
 module.exports = {
-  port: PORT, // tofix
+  //port: PORT, // tofix
   // Enable gzip compression of generated files.
   compress: true,
   // Silence WebpackDevServer's own logs since they're generally not useful.
