@@ -46,6 +46,8 @@ function resolveApp (relativePath) {
 
 
 module.exports = {
+  disableHostCheck = true,
+  
   port: port, // tofix
   // Enable gzip compression of generated files.
   compress: true,
