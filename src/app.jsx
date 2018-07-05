@@ -7,21 +7,24 @@ import isolate from '@cycle/isolate';
 const uuidv4 = require('uuid/v4');
 
 const fetchCards = gql`
-  query ($cmc: Int, $rarity: String){
-    cards (cmc: $cmc, rarity: $rarity){
+  query ($cmc: Int, $rarity: String, $colors: [String], $types: String){
+    cards (cmc: $cmc, rarity: $rarity, colors: $colors, types: $types){
       cmc
       name
       type
       text
+      colors
     }
-  }`
+  }
+`
 
 function view(listVNode$) {
   return listVNode$.map(ulVNode =>
     div([
       span('Manakosten: '),
       input('.inputCMC', {attrs: {type: 'text'}}),
-      select('.inputRarity', [option({attrs: {value: "Rare"}}, "Rare"), option({attrs: {value: "Uncommon"}}, "Uncommon"), option({attrs: {value: "Common"}}, "Common")]),
+      select('.inputRarity', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Mythic"}}, "Mythic"),option({attrs: {value: "Rare"}}, "Rare"), option({attrs: {value: "Uncommon"}}, "Uncommon"), option({attrs: {value: "Common"}}, "Common")]),
+      select('.inputType', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Creature"}}, "Creature"),option({attrs: {value: "Planeswalker"}}, "Planeswalker"), option({attrs: {value: "Enchantment"}}, "Enchantment"), option({attrs: {value: "Artifakt"}}, "Artifact"), option({attrs: {value: "Instant"}}, "Instant"), option({attrs: {value: "Sourcery"}}, "Sourcery")]),
       input('.filterWhite', {attrs: {type: 'checkbox'}}), 'Weiß',
       input('.filterBlack', {attrs: {type: 'checkbox'}}), 'Schwarz',
       input('.filterBlue', {attrs: {type: 'checkbox'}}), 'Blau',
@@ -53,24 +56,88 @@ function model(actions) {
 
 function intent(domSource) {
     const queryCMC$ = domSource.select('.inputCMC').events('keyup').map((ev) => {
-      return {cmc: parseInt(ev.target.value)}
+      return {
+        cmc: parseInt(ev.target.value),
+        value: "cmc"
+      }
     })
 
     const queryRarity$ = domSource.select('.inputRarity').events('input').map(ev =>{
-      return {rarity: ev.target.value}
+      return {
+        rarity: ev.target.value,
+        value: "rarity"
+      }
+    })
+
+    const queryBlack$ = domSource.select('.filterBlack').events('change').map(ev => {
+      return {
+        color: "Black",
+        value: "color"
+      }
+    })
+
+    const queryWhite$ = domSource.select('.filterWhite').events('change').map(ev => {
+      return {
+        color: "White",
+        value: "color"
+      }
+    })
+
+    const queryBlue$ = domSource.select('.filterBlue').events('change').map(ev => {
+      return {
+        color: "Blue",
+        value: "color"
+      }
+    })
+
+    const queryRed$ = domSource.select('.filterRed').events('change').map(ev => {
+      return {
+        color: "Red",
+        value: "color"
+      }
+    })
+
+    const queryGreen$ = domSource.select('.filterGreen').events('change').map(ev => {
+      return {
+        color: "Green",
+        value: "color"
+      }
+    })
+
+    const queryType$ = domSource.select('.inputType').events('input').map(ev =>{
+      return {
+        types: ev.target.value,
+        value: "type"
+      }
     })
 
     return{
-      query$: xs.merge(queryCMC$, queryRarity$).fold((query, current) =>{
-        if(current.cmc != undefined){
-          query.variables.cmc = current.cmc;
-        }
-        else if(current.rarity != ""){
-          query.variables.rarity = current.rarity;
+      query$: xs.merge(queryType$, queryCMC$, queryRarity$, queryBlack$, queryBlue$, queryGreen$, queryRed$, queryWhite$).fold((query, current) =>{
+        switch(current.value){
+          case "cmc":
+            query.variables.cmc = current.cmc;
+            break;
+          
+          case "rarity":
+            query.variables.rarity = current.rarity;
+            break;
+          
+          case "type":
+            query.variables.types = current.types;
+            break;
+
+          case "color":
+            let index = query.variables.colors.findIndex((color) => color == current.color);
+            if( index !== -1){
+              query.variables.colors = query.variables.colors.filter(((color) => color != current.color))
+            }
+            else{
+              query.variables.colors.push(current.color);
+            }
+            break;
         }
         return query
-      }
-        , {query: fetchCards, variables: {cmc: -1, rarity:""}, category: 'cards'})
+      }, {query: fetchCards, variables: {cmc: -1, rarity:"", colors: [], types: ""}, category: 'cards'})
       .filter(query => query.variables.cmc !== -1)
       .debug()
     }

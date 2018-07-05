@@ -12,7 +12,7 @@ const main = onionify(App)
 
 
 const networkInterface = createNetworkInterface({
-  uri: "http://127.0.0.1:4000/graphql"
+  uri: "https://alluring-saguaro-38302.herokuapp.com/graphql"
 });
 
 
