@@ -2,9 +2,6 @@
   "name": "GraphTest",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "cycle-scripts": "2.1.0"
-  },
   "dependencies": {
     "@cycle/collection": "^0.6.0",
     "@cycle/dom": "18.3.0",
@@ -21,10 +18,10 @@
     "xstream": "11.0.0"
   },
   "scripts": {
-    "start": "cycle-scripts start",
-    "test": "cycle-scripts test",
-    "build": "cycle-scripts build",
-    "eject": "cycle-scripts eject"
+    "start": "./cycle-scripts/index.js start",
+    "test": "./cycle-scripts/index.js test",
+    "build": "./cycle-scripts/index.js build",
+    "eject": "./cycle-scripts/index.js eject"
   },
   "cca": {
     "language": "javascript",

@@ -1,0 +1,78 @@
+{
+  "_from": "cycle-scripts@>=2.0.0",
+  "_id": "cycle-scripts@2.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-Olf9KcSHjPhVqj1QM8odkW2JVo4kiMLV3sXL5tsAC6Kh3tUNrr0bpeh5e/ywszupf9U5hviqtYqr4Rpj5VYkkw==",
+  "_location": "/cycle-scripts",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cycle-scripts@>=2.0.0",
+    "name": "cycle-scripts",
+    "escapedName": "cycle-scripts",
+    "rawSpec": ">=2.0.0",
+    "saveSpec": null,
+    "fetchSpec": ">=2.0.0"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cycle-scripts/-/cycle-scripts-2.1.0.tgz",
+  "_shasum": "c52dcf1ecb792dcc39c59e0596864b5f8ffee791",
+  "_spec": "cycle-scripts@>=2.0.0",
+  "_where": "/Users/Nils/Desktop/CycleJS_GraphTest/GraphTest",
+  "author": {
+    "name": "Nick Balestra",
+    "email": "nick@balestra.ch"
+  },
+  "bin": {
+    "cycle-scripts": "./index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/cyclejs-community/create-cycle-app/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Geovani Souza",
+      "email": "geovanisouza92@gmail.com"
+    },
+    {
+      "name": "Nick Balestra",
+      "email": "nick@balestra.ch"
+    }
+  ],
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "chalk": "^2.1.0",
+    "cross-spawn": "^5.1.0",
+    "fs-extra": "^4.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "inquirer": "^3.3.0",
+    "jest": "^21.2.1",
+    "react-dev-utils": "^4.1.0",
+    "snabbdom-pragma": "^2.5.0",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1"
+  },
+  "deprecated": false,
+  "description": "create-cycle-app core flavor",
+  "homepage": "https://github.com/cyclejs-community/create-cycle-app#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "name": "cycle-scripts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyclejs-community/create-cycle-app.git"
+  },
+  "scripts": {
+    "test": "echo \"Maybe later\""
+  },
+  "version": "2.1.0"
+}
