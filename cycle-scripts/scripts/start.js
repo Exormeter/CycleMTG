@@ -54,7 +54,7 @@ const cli = 'npm'
 const protocol = devServerConfig.https ? 'https' : 'http'
 //const host = devServerConfig.host
 //const port = devServerConfig.port
-const host = "0.0.0.0";
+const host = "cyclemtg.herokuapp.com";
 const port = process.env.PORT;
 
 function run (port) {
