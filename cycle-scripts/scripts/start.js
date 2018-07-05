@@ -52,10 +52,8 @@ process.env.NODE_ENV = 'development'
 
 const cli = 'npm'
 const protocol = devServerConfig.https ? 'https' : 'http'
-//const host = devServerConfig.host
-//const port = devServerConfig.port
-//const host = cyclemtg.herokuapp.com;
-const port = process.env.PORT;
+const host = devServerConfig.host
+const port = devServerConfig.port
 
 function run (port) {
   const compiler = createWebpackCompiler(

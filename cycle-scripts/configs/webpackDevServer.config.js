@@ -36,7 +36,8 @@ const fs = require('fs')
 const path = require('path')
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http'
-const host = process.env.HOST || 'localhost'
+const host = '0.0.0.0' || 'localhost'
+const port = process.env.PORT || 8000
 
 const appDirectory = fs.realpathSync(process.cwd())
 function resolveApp (relativePath) {
@@ -45,7 +46,7 @@ function resolveApp (relativePath) {
 
 
 module.exports = {
-  //port: PORT, // tofix
+  port: port, // tofix
   // Enable gzip compression of generated files.
   compress: true,
   // Silence WebpackDevServer's own logs since they're generally not useful.
@@ -85,12 +86,6 @@ module.exports = {
   watchOptions: {
     ignored: /node_modules/
   },
-
-  devServer: {
-    host: '0.0.0.0',
-    port: process.env.PORT
-  },
-
 
   // Enable HTTPS if the HTTPS environment variable is set to 'true'
   https: protocol === 'https',
