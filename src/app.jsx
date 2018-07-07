@@ -31,7 +31,7 @@ function view(listVNode$) {
       ]),
       div([
         label({style: {"margin-right": '67px', "font-family": "Open Sans"}}, 'Type:'),
-        select('.inputType', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Creature"}}, "Creature"),option({attrs: {value: "Planeswalker"}}, "Planeswalker"), option({attrs: {value: "Enchantment"}}, "Enchantment"), option({attrs: {value: "Artifakt"}}, "Artifact"), option({attrs: {value: "Instant"}}, "Instant"), option({attrs: {value: "Sourcery"}}, "Sourcery")]),
+        select('.inputType', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Creature"}}, "Creature"),option({attrs: {value: "Planeswalker"}}, "Planeswalker"), option({attrs: {value: "Enchantment"}}, "Enchantment"), option({attrs: {value: "Artifact"}}, "Artifact"), option({attrs: {value: "Instant"}}, "Instant"), option({attrs: {value: "Sorcery"}}, "Sorcery")]),
       ]),
       div([
         span({style: {"font-family": "Open Sans"}},'Color: '),
