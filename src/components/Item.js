@@ -31,9 +31,9 @@ export default function Item(sources) {
       tbody([tr('cardItem', [
         td('leftCol', [img({ attrs:{src: card.image_uris.small}})]),
         td('middleCol',[
-          p('.cardName', card.name), 
-          p('.cardText',  card.oracle_text),
-          p('.cardFlavor', card.flavor_text),
+          p('.cardName', {style: {"font-family": "Open Sans"}}, card.name), 
+          p('.cardText',  {style: {"font-family": "Open Sans"}}, card.oracle_text),
+          p('.cardFlavor', {style: {"font-style": "italic"}}, card.flavor_text),
           button('.delete', 'Delete')
         ]),
         td('rightCol', [img({ attrs:{src: symbol.icon_svg_uri, height: "42", width: "42"}})])

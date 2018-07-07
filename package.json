@@ -33,8 +33,8 @@
     "webpack-dev-server": "^2.9.1"
   },
   "scripts": {
+    "test": "cycle-scripts start",
     "start": "./cycle-scripts/index.js start",
-    "test": "./cycle-scripts/index.js test",
     "build": "./cycle-scripts/index.js build",
     "eject": "./cycle-scripts/index.js eject"
   },

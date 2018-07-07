@@ -1,7 +1,7 @@
 import xs from 'xstream';
 import gql from 'graphql-tag';
-import {div, p, ul, button, input, span, select, option} from '@cycle/dom';
-import {StateSource, makeCollection} from 'cycle-onionify';
+import {div, p, ul, button, input, span, select, option, label} from '@cycle/dom';
+import { makeCollection} from 'cycle-onionify';
 import Item from './components/Item'
 import isolate from '@cycle/isolate';
 const uuidv4 = require('uuid/v4');
@@ -21,15 +21,30 @@ const fetchCards = gql`
 function view(listVNode$) {
   return listVNode$.map(ulVNode =>
     div([
-      span('Manakosten: '),
-      input('.inputCMC', {attrs: {type: 'text'}}),
-      select('.inputRarity', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Mythic"}}, "Mythic"),option({attrs: {value: "Rare"}}, "Rare"), option({attrs: {value: "Uncommon"}}, "Uncommon"), option({attrs: {value: "Common"}}, "Common")]),
-      select('.inputType', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Creature"}}, "Creature"),option({attrs: {value: "Planeswalker"}}, "Planeswalker"), option({attrs: {value: "Enchantment"}}, "Enchantment"), option({attrs: {value: "Artifakt"}}, "Artifact"), option({attrs: {value: "Instant"}}, "Instant"), option({attrs: {value: "Sourcery"}}, "Sourcery")]),
-      input('.filterWhite', {attrs: {type: 'checkbox'}}), 'Weiß',
-      input('.filterBlack', {attrs: {type: 'checkbox'}}), 'Schwarz',
-      input('.filterBlue', {attrs: {type: 'checkbox'}}), 'Blau',
-      input('.filterGreen', {attrs: {type: 'checkbox'}}), 'Grün',
-      input('.filterRed', {attrs: {type: 'checkbox'}}), 'Rot',
+      div([
+        label({style: {"margin-right": '23px', "font-family": "Open Sans"}}, 'Manacosts:'),
+        input('.inputCMC', {attrs: {type: 'text'}}),
+      ]),
+      div([
+        label({style: {"margin-right": '60px', "font-family": "Open Sans"}}, 'Rarity:'),
+        select('.inputRarity', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Mythic Rare"}}, "Mythic"),option({attrs: {value: "Rare"}}, "Rare"), option({attrs: {value: "Uncommon"}}, "Uncommon"), option({attrs: {value: "Common"}}, "Common")]),
+      ]),
+      div([
+        label({style: {"margin-right": '67px', "font-family": "Open Sans"}}, 'Type:'),
+        select('.inputType', [option({attrs: {value: ""}}, "All"), option({attrs: {value: "Creature"}}, "Creature"),option({attrs: {value: "Planeswalker"}}, "Planeswalker"), option({attrs: {value: "Enchantment"}}, "Enchantment"), option({attrs: {value: "Artifakt"}}, "Artifact"), option({attrs: {value: "Instant"}}, "Instant"), option({attrs: {value: "Sourcery"}}, "Sourcery")]),
+      ]),
+      div([
+        span({style: {"font-family": "Open Sans"}},'Color: '),
+        input('.filterWhite', {attrs: {type: 'checkbox'}, style: {"font-family": "Open Sans"}}), 'Weiß',
+        
+        input('.filterBlack', {attrs: {type: 'checkbox'}, style: {"font-family": "Open Sans"}}), 'Schwarz',
+        
+        input('.filterBlue', {attrs: {type: 'checkbox'}, style: {"font-family": "Open Sans"}}), 'Blau',
+        
+        input('.filterGreen', {attrs: {type: 'checkbox'}, style: {"font-family": "Open Sans"}}), 'Grün',
+       
+        input('.filterRed', {attrs: {type: 'checkbox'}, style: {"font-family": "Open Sans"}}), 'Rot',
+      ]),
       ulVNode
     ])
   );
@@ -137,8 +152,8 @@ function intent(domSource) {
             break;
         }
         return query
-      }, {query: fetchCards, variables: {cmc: -1, rarity:"", colors: [], types: ""}, category: 'cards'})
-      .filter(query => query.variables.cmc !== -1)
+      }, {query: fetchCards, variables: {cmc: undefined, rarity:"", colors: [], types: ""}, category: 'cards'})
+      .drop(1)
       .debug()
     }
 }
